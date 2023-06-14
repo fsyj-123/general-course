@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+  redis:
+    host: ${REDIS_HOST}
+
+api:
+  course: ${API_HOST}
+server:
+  port: 8070

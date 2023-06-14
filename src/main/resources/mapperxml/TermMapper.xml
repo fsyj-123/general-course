@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.fsyj.course.mapper.TermMapper">
+  <resultMap id="BaseResultMap" type="site.fsyj.course.entity.Term">
+    <!--@mbg.generated-->
+    <!--@Table term-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="school_id" jdbcType="INTEGER" property="schoolId" />
+    <result column="term_describe" jdbcType="VARCHAR" property="termDescribe" />
+    <result column="start_date" jdbcType="DATE" property="startDate" />
+    <result column="end_date" jdbcType="DATE" property="endDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, school_id, term_describe, start_date, end_date
+  </sql>
+</mapper>

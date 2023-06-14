@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.fsyj.course.mapper.CourseMapper">
+    <resultMap id="BaseResultMap" type="site.fsyj.course.entity.Course">
+        <!--@mbg.generated-->
+        <!--@Table course-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="teacher" jdbcType="VARCHAR" property="teacher"/>
+        <result column="place" jdbcType="VARCHAR" property="place"/>
+        <result column="credit" jdbcType="FLOAT" property="credit"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="start_week" jdbcType="TINYINT" property="startWeek"/>
+        <result column="end_week" jdbcType="TINYINT" property="endWeek"/>
+        <result column="start_section" jdbcType="TINYINT" property="startSection"/>
+        <result column="end_section" jdbcType="TINYINT" property="endSection"/>
+        <result column="term_id" jdbcType="BIGINT" property="termId"/>
+        <result column="day" jdbcType="TINYINT" property="day"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, `name`, teacher, place, credit, user_id, start_week, end_week, start_section,
+        end_section, term_id, `day`
+    </sql>
+    <insert id="batchInsertWithUserTerm">
+        insert into course(`name`, teacher, place, credit, user_id, start_week, end_week, start_section,
+                           end_section, term_id, `day`)
+                values
+        <foreach collection="courses" item="item" separator=",">
+            (#{item.name}, #{item.teacher}, #{item.place}, #{item.credit}, #{user}, #{item.startWeek},
+             #{item.endWeek}, #{item.startSection}, #{item.endSection}, #{term}, #{item.day})
+        </foreach>
+    </insert>
+</mapper>
