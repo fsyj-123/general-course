@@ -69,7 +69,11 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> {
                 courseExceptionHandler.saveFailedTask(user, finalTerm, e);
             }
         });
-
+        try {
+            task.get(3000, TimeUnit.SECONDS);
+        } catch (InterruptedException | TimeoutException | ExecutionException e) {
+            log.error("任务" + user + "执行失败", e);
+        }
     }
 
     @Transactional(rollbackFor = {SqlSessionException.class})

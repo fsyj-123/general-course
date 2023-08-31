@@ -115,9 +115,7 @@ public class JWService {
     }
 
     private String doGetCourses(CloseableHttpClient client, BasicCookieStore cookieStore, String stuNo, String term) throws IOException {
-        // 建立与教务系统的通信信道
-        HttpGet get = new HttpGet(JWConsts.EDUCATIONAL_SYSTEM);
-        client.execute(get);
+
 
         // 获取课表
         HttpGet courseGet = new HttpGet(JWConsts.composeCourseUrl(term, stuNo));
@@ -133,8 +131,13 @@ public class JWService {
             if (clientCookieStore == null) {
                 LoginService loginService = new LoginService();
                 clientCookieStore = loginService.login(JWConsts.username, JWConsts.password);
-                BasicCookieStore cookieStore = clientCookieStore.getSecond();
-//                HttpClientBuilder.create().setProxy()
+                // 建立与教务系统的通信信道
+                HttpGet get = new HttpGet(JWConsts.EDUCATIONAL_SYSTEM);
+                try {
+                    clientCookieStore.getFirst().execute(get);
+                } catch (IOException e) {
+                    log.error("与教务处通信建立失败", e);
+                }
             }
         } else {
             LoginService loginService = new LoginService();
