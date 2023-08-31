@@ -107,7 +107,6 @@ public class TermService extends ServiceImpl<TermMapper, Term> {
         Term currentTerm = null;
         // 用于存储距离当前日期最近的上一个学期
         Term nearestTerm = null;
-
         for (Term term : terms) {
             if (now.compareTo(term.getStartDate()) >= 0 && now.compareTo(term.getEndDate()) <= 0) {
                 // 当前日期在学期的起始日期和结束日期之间，找到当前学期
@@ -119,6 +118,9 @@ public class TermService extends ServiceImpl<TermMapper, Term> {
                     nearestTerm = term;
                 }
             }
+        }
+        if (nearestTerm == null && currentTerm == null && terms.size() == 1) {
+            currentTerm = terms.get(0);
         }
         if (currentTerm == null) {
             currentTerm = nearestTerm;
