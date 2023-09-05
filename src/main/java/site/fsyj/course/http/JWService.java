@@ -1,6 +1,7 @@
 package site.fsyj.course.http;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.ParseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCookieStore;
@@ -49,8 +50,8 @@ public class JWService {
      * 2. 向课表接口发请求
      * 3. 解析
      */
-    public List<Course> getCourse(String stuNo, String term) throws TimeoutException {
-        verifyClient(false);
+    public List<Course> getCourse(String stuNo, String term, boolean forceLogin) throws TimeoutException {
+        verifyClient(forceLogin);
         try {
             CloseableHttpClient client = clientCookieStore.getFirst();
             BasicCookieStore cookieStore = clientCookieStore.getSecond();
@@ -66,7 +67,7 @@ public class JWService {
                 throw new TimeoutException("任务执行超时");
             }
             return parse(html);
-        } catch (IOException | InterruptedException | CompletionException e) {
+        } catch (IOException | InterruptedException | CompletionException | ParseException e) {
             log.error("课表获取出错", e);
         } catch (TimeoutException e) {
             verifyClient(true);
@@ -93,6 +94,9 @@ public class JWService {
                 .header("Content-Type", "application/json")
                 .build();
         HttpResponse<String> response = parseClient.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            throw new ParseException(response.body());
+        }
         List<CourseDto> courseDtos = JsonUtil.jsonToList(response.body(), CourseDto.class);
         List<Course> courses = courseDtos.stream().map((dto) -> {
             List<Integer> weeks = dto.getWeeks();

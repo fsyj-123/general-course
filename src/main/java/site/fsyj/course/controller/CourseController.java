@@ -4,8 +4,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import site.fsyj.course.annotation.NoAuth;
 import site.fsyj.course.dto.ReImportDto;
 import site.fsyj.course.entity.AjaxResult;
+import site.fsyj.course.entity.Course;
 import site.fsyj.course.entity.Term;
 import site.fsyj.course.entity.User;
 import site.fsyj.course.service.CourseService;
@@ -14,6 +16,7 @@ import site.fsyj.course.utils.AuthenticateConst;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Api("课程-400")
 @RestController
@@ -56,6 +59,20 @@ public class CourseController {
         AjaxResult result = verify(user);
         if (result == null) {
             result = AjaxResult.success(courseService.weekCourse(user, weekNo, termId));
+        }
+        return result;
+    }
+
+    @NoAuth
+    @GetMapping("/{account}/parse")
+    public AjaxResult parseWithAccount(@PathVariable String account) {
+        User user = new User(null, 1, null, null, account);
+        // get term obj
+        Term term = termService.getCurrentTerm(user);
+        AjaxResult result = verify(user);
+        if (result == null) {
+            List<Course> courses = courseService.importWithParse(user, term);
+            result = AjaxResult.success("导入成功", courses);
         }
         return result;
     }

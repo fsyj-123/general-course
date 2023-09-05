@@ -59,7 +59,7 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> {
         Future<?> task = coursePool.submit(() -> {
             log.info("用户" + user + "任务开始");
             try {
-                List<Course> course = jwService.getCourse(user.getStuNo(), finalTerm.getTermDescribe());
+                List<Course> course = jwService.getCourse(user.getStuNo(), finalTerm.getTermDescribe(), false);
                 // delete termId and user id rows
                 deleteAndInsertCourses(course, user, finalTerm);
                 log.info("任务" + user + "执行成功");
@@ -123,6 +123,24 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> {
         map.put("courses", courseList);
         map.put("currentWeek", week);
         return map;
+    }
+
+    public List<Course> importWithParse(User user, Term term) {
+        if (term == null) {
+            term = termService.getCurrentTerm(user);
+        }
+        List<Course> result = null;
+        try {
+            result = jwService.getCourse(user.getStuNo(), term.getTermDescribe(), false);
+        } catch (Exception e) {
+            // retry
+            try {
+                result = jwService.getCourse(user.getStuNo(), term.getTermDescribe(), true);
+            } catch (Exception ex) {
+                log.error("账号绑定错误：", ex);
+            }
+        }
+        return result;
     }
 
 }
