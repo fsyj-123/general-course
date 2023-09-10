@@ -7,8 +7,10 @@ spring:
       matching-strategy: ant_path_matcher
 
 wx:
-  app-id: wxdbce1cd0903937cd
-  secret: 1951b5a4bd66dfca528e9dbd77fa2f91
+  app-id: xxx
+  secret: xxx
+
+
 
 mybatis-plus:
   mapper-locations: classpath:mapperxml/*.xml

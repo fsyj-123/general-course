@@ -131,16 +131,16 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> {
         }
         List<Course> result = null;
         try {
-            result = jwService.getCourse(user.getStuNo(), term.getTermDescribe(), false);
+            result = jwService.getCourse(user.getStuNo(), term.getTermDescribe(), true);
         } catch (Exception e) {
             // retry
+            log.error("重试");
             try {
                 result = jwService.getCourse(user.getStuNo(), term.getTermDescribe(), true);
-            } catch (Exception ex) {
-                log.error("账号绑定错误：", ex);
+            } catch (TimeoutException ex) {
+                log.error("重试错误，返回空");
             }
         }
         return result;
     }
-
 }

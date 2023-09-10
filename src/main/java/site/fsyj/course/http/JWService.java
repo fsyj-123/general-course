@@ -1,7 +1,6 @@
 package site.fsyj.course.http;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.ParseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCookieStore;
@@ -15,6 +14,7 @@ import site.fsyj.cdut.utils.Pair;
 import site.fsyj.course.config.ApiConfig;
 import site.fsyj.course.dto.CourseDto;
 import site.fsyj.course.entity.Course;
+import site.fsyj.course.entity.exception.ParseException;
 import site.fsyj.course.utils.JWConsts;
 import site.fsyj.course.utils.JsonUtil;
 
@@ -50,7 +50,7 @@ public class JWService {
      * 2. 向课表接口发请求
      * 3. 解析
      */
-    public List<Course> getCourse(String stuNo, String term, boolean forceLogin) throws TimeoutException {
+    public List<Course> getCourse(String stuNo, String term, boolean forceLogin) throws TimeoutException, ParseException {
         verifyClient(forceLogin);
         try {
             CloseableHttpClient client = clientCookieStore.getFirst();
@@ -67,7 +67,7 @@ public class JWService {
                 throw new TimeoutException("任务执行超时");
             }
             return parse(html);
-        } catch (IOException | InterruptedException | CompletionException | ParseException e) {
+        } catch (IOException | InterruptedException | CompletionException e) {
             log.error("课表获取出错", e);
         } catch (TimeoutException e) {
             verifyClient(true);
@@ -83,7 +83,7 @@ public class JWService {
      * @throws IOException
      * @throws InterruptedException
      */
-    private List<Course> parse(String html) throws IOException, InterruptedException {
+    private List<Course> parse(String html) throws IOException, InterruptedException, ParseException {
         Document document = Jsoup.parse(html);
         document.select("style").remove();
         html = document.toString();
@@ -146,6 +146,13 @@ public class JWService {
         } else {
             LoginService loginService = new LoginService();
             clientCookieStore = loginService.login(JWConsts.username, JWConsts.password);
+            // 建立与教务系统的通信信道
+            HttpGet get = new HttpGet(JWConsts.EDUCATIONAL_SYSTEM);
+            try {
+                clientCookieStore.getFirst().execute(get);
+            } catch (IOException e) {
+                log.error("与教务处通信建立失败", e);
+            }
         }
     }
 
