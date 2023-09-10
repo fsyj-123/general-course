@@ -1,8 +1,9 @@
 # 课表爬虫项目
 
-![GitHub repo size](https://img.shields.io/github/repo-size/yourusername/your-repo)
-![GitHub stars](https://img.shields.io/github/stars/yourusername/your-repo?style=social)
-![GitHub forks](https://img.shields.io/github/forks/yourusername/your-repo?style=social)
+![GitHub repo size](https://img.shields.io/github/repo-size/fsyj-123/general-course)
+![GitHub stars](https://img.shields.io/github/stars/fsyj-123/general-course?style=social)
+![GitHub forks](https://img.shields.io/github/forks/fsyj-123/general-course?style=social)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 这个项目利用爬虫技术登录教务处网站，使用API获取课表信息，并通过JavaScript进行解析。项目的目标是帮助学生轻松获取他们的课表信息。
 
@@ -35,3 +36,7 @@ public static final String password = "YOUR_PASSWORD";
 5. 启动 `course-api` 服务，它将提供课表信息的API接口。
 
 6. 启动项目，确保所有配置和服务都已经正确启动。
+
+
+许可证
+本项目采用 [MIT](https://opensource.org/licenses/MIT) 许可证。请查看许可证文件以获取更多信息。
