@@ -1,0 +1,13 @@
+{
+  "name": "course-api",
+  "version": "1.0",
+  "description": "used to provide course parse service",
+  "main": "api.js",
+  "scripts": {
+    "start": "node api.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "express": "^4.18.2"
+  }
+}
